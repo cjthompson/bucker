@@ -244,28 +244,37 @@ Bucker.prototype.exception = function (err) {
     });
 };
 
+function format() {
+    return util.format.apply(this, Array.prototype.slice.call(arguments,0).map(function (arg) {
+        if (typeof arg !== 'string') {
+            return util.inspect(arg, {depth: null, colors: true});
+        }
+        return arg;
+    }));
+}
+
 Bucker.prototype.debug = function () {
-    this._runHandlers('debug', util.format.apply(this, arguments));
+    this._runHandlers('debug', format.apply(this, arguments));
     return this;
 };
 
 Bucker.prototype.log = Bucker.prototype.info = function () {
-    this._runHandlers('info', util.format.apply(this, arguments));
+    this._runHandlers('info', format.apply(this, arguments));
     return this;
 };
 
 Bucker.prototype.warn = function () {
-    this._runHandlers('warn', util.format.apply(this, arguments));
+    this._runHandlers('warn', format.apply(this, arguments));
     return this;
 };
 
 Bucker.prototype.warning = function () {
-    this._runHandlers('warn', util.format.apply(this, arguments));
+    this._runHandlers('warn', format.apply(this, arguments));
     return this;
 };
 
 Bucker.prototype.error = function () {
-    this._runHandlers('error', util.format.apply(this, arguments));
+    this._runHandlers('error', format.apply(this, arguments));
     return this;
 };
 
@@ -395,7 +404,7 @@ exports.register = function (plugin, options, next) {
         });
         if (tags.hapi && tags.error && event.data && event.data.msec) return; // ignore internal hapi messages
         if (tags.hapi && tags.error && tags.unauthenticated) return;
-        data = util.format(event.data);
+        data = format(event.data);
         bucker.tags(event.tags)[level](data);
     };
 
