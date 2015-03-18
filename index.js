@@ -247,7 +247,7 @@ Bucker.prototype.exception = function (err) {
 function format() {
     return util.format.apply(this, Array.prototype.slice.call(arguments,0).map(function (arg) {
         if (typeof arg !== 'string') {
-            return util.inspect(arg, {depth: null, colors: true});
+            return util.inspect(arg, {depth: null});
         }
         return arg;
     }));
